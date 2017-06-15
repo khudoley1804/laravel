@@ -18,7 +18,10 @@ Route::middleware('auth')->resource('news','NewsController');
 
 Route::middleware('active')->resource('user','UserController');
 
+Route::middleware('visits')->resource('user','UserController');
+
 Auth::routes();
 
 Route::get('/user', 'UserController@index')->name('user');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/add-visits', 'HomeController@addVisits')->name('home.add-visits');

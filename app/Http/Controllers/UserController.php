@@ -8,6 +8,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Auth;
 use Cache;
 use App\Models\User;
+use App\Models\Visits;
 
 
 class UserController extends Controller
@@ -30,9 +31,16 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-         $users = User::all();
-        //$value = Cache::get('user#4');
-        return view('user', ['users' => $users]);
+        $users = User::all();
 
+        $visits = Visits::find(18);
+        $visits = $visits['count_visits'];
+        $visits = json_decode($visits,true);
+        //dd($visits);
+        return view('user', [
+            'users' => $users,
+            'visits' => $visits
+        ]);
+        //return view('user', compact("visits"));
     }
 }

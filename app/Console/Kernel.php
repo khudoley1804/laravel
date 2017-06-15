@@ -4,6 +4,9 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\Visits;
+use Cache;
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,8 +27,20 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call(function () {
+          
+            $statistic = Cache::get('statistic');
+            $statistic = json_encode($statistic);
+            $time = Carbon::now();
+            $visits = [
+                'count_visits' => $statistic,
+                'dateTime' => $time
+            ];
+            Visits::create($visits);
+            //Cache::tags('statistic')->flush();
+
+        })->everyTenMinutes();
+
     }
 
     /**
